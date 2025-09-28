@@ -1,0 +1,4 @@
+{
+  "name": "teachable-home-assessment",
+  "image": "ghcr.io/rails/devcontainer/images/ruby:3.4.5"
+}

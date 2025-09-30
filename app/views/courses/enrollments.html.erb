@@ -1,0 +1,13 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, @course.name %>
+
+<%= link_to "< Back to courses", courses_path, class: "mb-5 text-blue-500 hover:underline" %>
+
+<img class="course-image w-full h-48 object-cover" src="<%= @course.image_url %>" alt="<%= @course.name %>">
+
+<h1 class="text-3xl py-4"><%= @course.name %></h1>
+
+<div id="course-<%= @course.id %>-enrollments" class="p-4 mb-10">
+  <%= render partial: "enrollments/list", locals: { enrollments: @enrollments } %>
+</div>

@@ -17,8 +17,8 @@ class CoursesController < ApplicationController
     end
   end
 
-  # GET /courses/1
-  def show
+  # GET /courses/1/enrollments
+  def enrollments
     courses_list = Rails.cache.read("courses_list") || []
     @course = courses_list.find { |course| course.id == params[:id].to_i }
 

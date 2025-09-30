@@ -6,7 +6,7 @@
     <p class="course-description"><%= course.description %></p>
     <p class="course-status text-gray-500"><%= course.is_published ? "Published" : "Unpublished" %></p>
     <div class="mt-4">
-      <%= link_to "Show enrollments", course_path(course.id), class: "text-blue-500 hover:underline" %>
+      <%= link_to "Show enrollments", enrollments_course_path(course.id), class: "text-blue-500 hover:underline" %>
     </div>
   </div>
 </div>

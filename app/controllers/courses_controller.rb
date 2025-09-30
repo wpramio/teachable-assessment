@@ -17,6 +17,14 @@ class CoursesController < ApplicationController
     end
   end
 
+  # GET /courses/1
+  def show
+    courses_list = Rails.cache.read("courses_list") || []
+    @course = courses_list.find { |course| course.id == params[:id].to_i }
+
+    render plain: "Not found", status: :not_found and return unless @course
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_course

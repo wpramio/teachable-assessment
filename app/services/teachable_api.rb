@@ -8,7 +8,21 @@ module TeachableApi
 
   # Fetch all courses at your school
   def self.get_courses
-    get("/v1/courses", http_headers)
+    begin
+      response = get("/v1/courses", http_headers)
+      if response.success?
+        Rails.logger.info "[Teachable API] successful call to get_courses, IDs returned: " \
+        "#{response["courses"].map { |course| course["id"] }}"
+        response["courses"]
+      else
+        Rails.logger.warn "[Teachable API] unsuccessful call to get_courses: " \
+        "#{response.code} #{response.message}"
+        []
+      end
+    rescue StandardError => e
+      Rails.logger.error "[Teachable API] error: #{e.message}"
+      []
+    end
   end
 
   # Fetch active enrolled students and student progress for a specific course

@@ -26,18 +26,24 @@ class CoursesController < ApplicationController
 
     @enrollments = Rails.cache.fetch("enrollments_course_#{@course.id}", expires_in: 30.minutes) do
       enrollments_data = TeachableApi.get_enrollments(@course.id)
-      enrollments_data.map do |enrollment_data|
-        user_data = TeachableApi.get_user(enrollment_data["user_id"])
-        Enrollment.new(
-          enrolled_at: enrollment_data["enrolled_at"],
-          expires_at: enrollment_data["expires_at"],
-          completed_at: enrollment_data["completed_at"],
-          percent_complete: enrollment_data["percent_complete"].to_f,
-          user_id: enrollment_data["user_id"].to_i,
-          user_name: user_data["name"],
-          user_email: user_data["email"]
-        )
+      # with parallel threads to speed up user data fetching
+      threads = []
+      enrollments_data.each do |enrollment_data|
+        threads << Thread.new do
+          user_data = TeachableApi.get_user(enrollment_data["user_id"])
+          Enrollment.new(
+            enrolled_at: enrollment_data["enrolled_at"],
+            expires_at: enrollment_data["expires_at"],
+            completed_at: enrollment_data["completed_at"],
+            percent_complete: enrollment_data["percent_complete"].to_f,
+            user_id: enrollment_data["user_id"].to_i,
+            user_name: user_data["name"],
+            user_email: user_data["email"]
+          )
+        end
       end
+
+      threads.map(&:value)
     end
   end
 

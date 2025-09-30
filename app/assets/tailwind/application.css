@@ -12,6 +12,10 @@ body {
   background-color: #198C6D;
 }
 
+.font-primary {
+  color: #1b4942;
+}
+
 .course-card {
   background-color: #f8faf4;
 }

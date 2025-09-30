@@ -1,10 +1,11 @@
 <div id="course-<%= course.id %>" class="course-card flex flex-col shadow hover:shadow-lg transition-shadow duration-300">
   <img class="course-image w-full h-48 object-cover" src="<%= course.image_url %>" alt="<%= course.name %>">
-  <div class="course-info p-4">
-    <h2 class="course-name text-lg"><%= course.name %></h2>
-    <p class="course-heading text-gray-600"><%= course.heading %></p>
+  <div class="course-info flex flex-col p-4 pt-2">
+    <%# badge pill for course status %>
+    <%= render partial: course.is_published ? "badge_published" : "badge_unpublished" %>
+    <h2 class="course-name text-lg font-bold font-primary"><%= course.name %></h2>
+    <p class="course-heading text-gray-800"><%= course.heading %></p>
     <p class="course-description"><%= course.description %></p>
-    <p class="course-status text-gray-500"><%= course.is_published ? "Published" : "Unpublished" %></p>
     <div class="mt-4">
       <%= link_to "Show enrollments", enrollments_course_path(course.id), class: "text-blue-500 hover:underline" %>
     </div>

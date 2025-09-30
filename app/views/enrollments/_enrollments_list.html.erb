@@ -1,0 +1,28 @@
+<%# Subtitle %>
+<h3 class="text-2xl my-2">Enrollments</h3>
+
+<div id="enrollments-list" class="w-full border-collapse border border-gray-200 mt-4">  
+  <%# table header %>
+  <div class="grid grid-cols-4 bg-gray-100 p-2 border-b border-gray-200">
+    <div class="font-semibold">Name</div>
+    <div class="font-semibold">Email</div>
+    <div class="font-semibold">Status</div>
+    <div class="font-semibold">Enrolled On</div>
+  </div>
+
+  <%# table body %>
+  <div class="table-body">
+    <% if @enrollments.present? %>
+      <% @enrollments.each do |enrollment| %>
+        <div class="grid grid-cols-4 border-b border-gray-200 p-2">
+          <p class="enrollment-user font-semibold"><%= enrollment.user_name %></p>
+          <p class="enrollment-user font-semibold break-all"><%= enrollment.user_email %></p>
+          <p class="enrollment-status text-gray-600"><%= enrollment.expired? ? "Expired" : "Active" %></p>
+          <p class="enrollment-created-at text-gray-500 text-sm"><%= enrollment.enrolled_at %></p>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-gray-600 m-4">No enrollments found for this course.</p>
+    <% end %>
+  </div>
+</div>

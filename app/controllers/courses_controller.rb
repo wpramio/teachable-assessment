@@ -3,7 +3,7 @@ require_relative "../services/teachable_api"
 class CoursesController < ApplicationController
   # GET /courses
   def index
-    @courses = Rails.cache.fetch("courses_list", expires_in: 5.minutes) do
+    @courses = Rails.cache.fetch("courses_list", expires_in: 30.minutes) do
       TeachableApi.get_courses.map do |course_data|
         Course.new(
           id: course_data["id"].to_i,
@@ -23,6 +23,22 @@ class CoursesController < ApplicationController
     @course = courses_list.find { |course| course.id == params[:id].to_i }
 
     render plain: "Not found", status: :not_found and return unless @course
+
+    @enrollments = Rails.cache.fetch("enrollments_course_#{@course.id}", expires_in: 30.minutes) do
+      enrollments_data = TeachableApi.get_enrollments(@course.id)
+      enrollments_data.map do |enrollment_data|
+        user_data = TeachableApi.get_user(enrollment_data["user_id"])
+        Enrollment.new(
+          enrolled_at: enrollment_data["enrolled_at"],
+          expires_at: enrollment_data["expires_at"],
+          completed_at: enrollment_data["completed_at"],
+          percent_complete: enrollment_data["percent_complete"].to_f,
+          user_id: enrollment_data["user_id"].to_i,
+          user_name: user_data["name"],
+          user_email: user_data["email"]
+        )
+      end
+    end
   end
 
   private

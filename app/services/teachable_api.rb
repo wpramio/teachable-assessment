@@ -27,12 +27,39 @@ module TeachableApi
 
   # Fetch active enrolled students and student progress for a specific course
   def self.get_enrollments(course_id)
-    get("/v1/courses/#{course_id}/enrollments", http_headers)
+    begin
+      response = get("/v1/courses/#{course_id}/enrollments", http_headers)
+      if response.success?
+        Rails.logger.info "[Teachable API] successful call to get_enrollments, user_id's returned: " \
+        "#{response["enrollments"].map { |enrollment| enrollment["user_id"] }}"
+        response["enrollments"]
+      else
+        Rails.logger.warn "[Teachable API] unsuccessful call to get_enrollments: " \
+        "#{response.code} #{response.message}"
+        []
+      end
+    rescue StandardError => e
+      Rails.logger.error "[Teachable API] error: #{e.message}"
+      []
+    end
   end
 
   # List a specific user and their course enrollments by user ID
   def self.get_user(user_id)
-    get("/v1/users/#{user_id}", http_headers)
+    begin
+      response = get("/v1/users/#{user_id}", http_headers)
+      if response.success?
+        Rails.logger.info "[Teachable API] successful call to get_user: #{user_id}"
+        response
+      else
+        Rails.logger.warn "[Teachable API] unsuccessful call to get_user: " \
+        "#{response.code} #{response.message}"
+        {}
+      end
+    rescue StandardError => e
+      Rails.logger.error "[Teachable API] error: #{e.message}"
+      {}
+    end
   end
 
   private

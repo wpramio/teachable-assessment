@@ -1,0 +1,11 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Courses" %>
+
+<h1>Courses</h1>
+
+<div id="courses-list">
+  <% @courses.each do |course| %>
+    <%= render partial: "course", locals: { course: course } %>
+  <% end %>
+</div>

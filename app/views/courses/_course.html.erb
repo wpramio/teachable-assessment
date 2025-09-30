@@ -1,0 +1,7 @@
+<div id="course-<%= course.id %>">
+  <h2 class="course-name"><%= course.name %></h2>
+  <p class="course-heading"><%= course.heading %></p>
+  <p class="course-description"><%= course.description %></p>
+  <p class="course-status"><%= course.is_published ? "Published" : "Unpublished" %></p>
+  <img class="course-image" src="<%= course.image_url %>" alt="<%= course.name %>">
+</div>
